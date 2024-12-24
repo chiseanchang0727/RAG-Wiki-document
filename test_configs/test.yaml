@@ -1,0 +1,10 @@
+Configs:
+  top_n: 3
+  chunk_config:
+    chunk_method: sentence_splitter
+    chunk_size: 1000
+    chunk_overlap: 100
+  vectorize_config:
+    collection_name: "test_1"
+    renew_collection: true
+    embedding_model_name: sentence-transformers/distiluse-base-multilingual-cased-v1
