@@ -7,11 +7,12 @@ from langchain_core.retrievers import BaseRetriever
 
 
 class CombineRetriever:
-    def __init__(self, vectorstore, doc:pd.DataFrame, config: RAGConfig):
+    def __init__(self, vectorstore, doc:pd.DataFrame, config: RAGConfig, chunked_data):
         self.vectorstore = vectorstore
         self.kw_top_k = config.retriever_config.kw_top_k
         self.vector_k = config.retriever_config.vector_top_k
         self.top_n = config.retriever_config.top_n
+        self.chunked_data = chunked_data
 
         if isinstance(doc, pd.DataFrame):
             self.doc_list = doc.to_dict(orient='records')
@@ -22,7 +23,7 @@ class CombineRetriever:
 
     def lexical_retrieval(self, query):
 
-        tokenized_docs = [doc['file_content'].split() for doc in self.doc_list]
+        tokenized_docs = [doc.page_content.split() for doc in self.chunked_data]
         bm25 = BM25Okapi(tokenized_docs)
 
         tokenized_query = query.split()
@@ -31,9 +32,9 @@ class CombineRetriever:
 
         # return the doc index and sort in descending order
         top_k_indices = np.argsort(scores)[::-1][:self.kw_top_k]
-        top_k_docs = [self.doc_list[i] for i in top_k_indices]
+        top_k_docs = [self.chunked_data[i] for i in top_k_indices]
 
-        return top_k_docs
+        return [{'file_name': item.metadata['file_name'], 'file_content': item.page_content} for item in top_k_docs]
     
     def semantic_retrieval(self, query):
 

@@ -4,7 +4,7 @@ import pandas as pd
 
 def read_txt_data() -> pd.DataFrame:
 
-    data_path = "data/raw_docs/"
+    data_path = "./data/raw_docs/"
 
     directory_list = [os.path.join(data_path, folder) for folder in os.listdir(data_path)]
 
@@ -30,3 +30,10 @@ def read_txt_data() -> pd.DataFrame:
 
 
     return df
+
+def read_qa_data() -> pd.DataFrame:
+
+    data_path = "./data/qa_pair/qa_pair_file.csv"
+
+
+    return pd.read_csv(data_path)

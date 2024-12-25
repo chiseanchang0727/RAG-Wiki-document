@@ -3,7 +3,7 @@ import argparse
 from dotenv import load_dotenv
 from utils import load_config_from_yaml
 from configs.rag_config import RAGConfig
-from src.data_io.read_data import read_txt_data
+from src.data_io.read_data import read_txt_data, read_qa_data
 from src.chunk.chunk import chunk_data
 from src.vectorize.doc_vectorize import vectorize
 from src.retriever.fusion_retrieval import fusion_retriever
@@ -37,10 +37,11 @@ def main():
         vectorize(data=chunked_data, config=config, chroma_db_path=chroma_db_path)
 
     if args.retriever:
-        # df = read_txt_data()
-        # concat qa_pairs
-        query= 'Was Abraham Lincoln the sixteenth President of the United States?'
-        fusion_retriever(query=query, config=config, vectorstore_path=chroma_db_path)
+        df = read_txt_data()
+        chunked_data = chunk_data(df, config=config, page_content_column='file_content')
+        df_qa = read_qa_data()
+        
+        fusion_retriever(df_qa, config=config, vectorstore_path=chroma_db_path, chunked_data=chunked_data)
 
 if __name__ == "__main__":
     main()
