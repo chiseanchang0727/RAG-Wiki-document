@@ -44,7 +44,8 @@ class CombineRetriever:
     def rrf(self, result_list: list, k=60):
         rrf_scores = {}
         for result in result_list:
-            for rank, doc_id in enumerate(result):
+            for rank, doc in enumerate(result):
+                doc_id = doc['file_name']
                 # get the score of doc_id, return 0 if the doc_id is not existed    
                 rrf_scores[doc_id] = rrf_scores.get(doc_id, 0) + 1/(k + rank)
 
@@ -52,21 +53,22 @@ class CombineRetriever:
 
         return sorted_results
     
-    def get_relevant_docs(self, combined_list):
-        rrf_scores = {}
-        for result in combined_list:
-            for rank, doc in enumerate(result):
-                doc_id = doc['file_name']
-                rrf_scores[doc_id] = rrf_scores.get(doc_id, 0) + 1/(60 + rank)
-        sorted_results = sorted(rrf_scores.items(), key=lambda item: item[1], reverse=True)
+    def get_relevant_docs(self, query):
+        lexical_result = self.lexical_retrieval(query)
 
-        return sorted_results
+        semantic_result = self.semantic_retrieval(query)
+
+        combined_result_list = [lexical_result, semantic_result]
+
+        rrf_result = self.rrf(combined_result_list)
+
+        return rrf_result
 
             
 
 class DocRetriever(BaseRetriever):
     combined_retriever: CombineRetriever = Field(default_factory=CombineRetriever)
 
-    def _get_relevant_documents(self, query):
+    def get_relevant_documents(self, query):
         result = self.combined_retriever.get_relevant_docs(query)
         return result
