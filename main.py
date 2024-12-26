@@ -6,7 +6,7 @@ from configs.rag_config import RAGConfig
 from src.data_io.read_data import read_txt_data, read_qa_data
 from src.chunk.chunk import chunk_data
 from src.vectorize.doc_vectorize import vectorize
-from src.retriever.fusion_retrieval import fusion_retriever
+from src.retriever.doc_retrieval import doc_retrieval
 
 def get_argument():
     args = argparse.ArgumentParser()
@@ -40,8 +40,8 @@ def main():
         df = read_txt_data()
         chunked_data = chunk_data(df, config=config, page_content_column='file_content')
         df_qa = read_qa_data()
-        
-        fusion_retriever(df_qa, config=config, vectorstore_path=chroma_db_path, chunked_data=chunked_data)
+
+        result = doc_retrieval(config=config , vectorstore_path=chroma_db_path, qa_data=df_qa, chunked_data=chunked_data)
 
 if __name__ == "__main__":
     main()

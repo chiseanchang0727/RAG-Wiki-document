@@ -7,19 +7,13 @@ from langchain_core.retrievers import BaseRetriever
 
 
 class CombineRetriever:
-    def __init__(self, vectorstore, doc:pd.DataFrame, config: RAGConfig, chunked_data):
+    def __init__(self, vectorstore, chunked_data, config: RAGConfig):
         self.vectorstore = vectorstore
         self.kw_top_k = config.retriever_config.kw_top_k
         self.vector_k = config.retriever_config.vector_top_k
         self.top_n = config.retriever_config.top_n
         self.chunked_data = chunked_data
 
-        if isinstance(doc, pd.DataFrame):
-            self.doc_list = doc.to_dict(orient='records')
-        elif isinstance(doc, list):
-            self.doc_list = doc
-        else:
-            raise ValueError("The `doc` parameter must be a pandas DataFrame or a list.")
 
     def lexical_retrieval(self, query):
 
