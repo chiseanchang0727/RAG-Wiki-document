@@ -6,7 +6,7 @@ from src.retriever.fusion_retrieval import fusion_retriever
 from langchain_chroma import Chroma
 
 
-def doc_retrieval(config:RAGConfig , vectorstore_path, qa_data: pd.DataFrame, chunked_data:LangChainDocument):
+def doc_retrieval(config:RAGConfig , llm, vectorstore_path, qa_data: pd.DataFrame, chunked_data:LangChainDocument):
 
         embedding_model = HuggingFaceEmbeddings(model_name=config.vectorize_config.embedding_model_name)
 
@@ -17,14 +17,23 @@ def doc_retrieval(config:RAGConfig , vectorstore_path, qa_data: pd.DataFrame, ch
         )
 
         df = []
-        for _, row in qa_data.iterrows():
-            query = row['Question']
-            row['retrieved_docs'] = fusion_retriever(
-                  query,  chunked_data, config=config, vectorstore=vectorstore, embedding_model=embedding_model
+        for idx, row in qa_data.iterrows():
+            target = row['ArticleTitle']
+            question = row['Question']
+            print(f"Q: {question}")
+
+            file_name, llm_answer = fusion_retriever(
+                  target, question,  chunked_data, llm, config=config, vectorstore=vectorstore
             )
 
+            row['retrieved_docs'] = file_name 
+            row['llm_answer'] = llm_answer
+
+            print(f'Filename: {file_name}')
+            print(f'A: {llm_answer}')
+            print(f"{idx} is done.")
+
             df.append(row)
-            
         df = pd.DataFrame(df)
 
         return df

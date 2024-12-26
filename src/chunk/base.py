@@ -4,6 +4,7 @@ from langchain.schema import Document as LangChainDocument
 from llama_index.core import Document as LlamaIndexDocument
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from llama_index.core.node_parser import SentenceSplitter
+import uuid
 
 class DocumentChunk:
     def __init__(self, df, chunk_method, chunk_size, chunk_overlap, page_content_column):
@@ -11,9 +12,9 @@ class DocumentChunk:
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
         chunk_method_category = ChunkMethod(self.chunk_method).get_category()
-        self.loaded_data = self._data_encapsulate(df, chunk_method_category, page_content_column)
+        self.loaded_data = self.__data_encapsulate(df, chunk_method_category, page_content_column)
     
-    def _data_encapsulate(self, df, chunk_method_category, page_content_column):
+    def __data_encapsulate(self, df, chunk_method_category, page_content_column):
 
         if chunk_method_category == 'langchain':
         
@@ -28,7 +29,14 @@ class DocumentChunk:
                 ) 
                 for _, row in df.iterrows()
             ]
+    @staticmethod
+    def __create_uuid(chunked_data):
+        namespace = uuid.NAMESPACE_DNS
+        uuid_set = [str(uuid.uuid5(namespace, str(idx))) for idx in range(len(chunked_data))]
+        for idx, item in enumerate(chunked_data):
+            item.metadata.update({"uuid": uuid_set[idx]}) 
 
+        return chunked_data
         
 
     def recursive_splitter(self):
@@ -42,6 +50,8 @@ class DocumentChunk:
 
         chunked_data = text_splitter.transform_documents(self.loaded_data)
 
+        chunked_data = self.__create_uuid(chunked_data)
+
         return chunked_data
     
     def sentence_splitter(self):
@@ -50,10 +60,12 @@ class DocumentChunk:
         chunk_overlap = self.chunk_overlap,
         )
         chunked_data = splitter.get_nodes_from_documents(self.loaded_data)
+
+        chunked_data = self.__create_uuid(chunked_data)
         
         # Convert nodes into LangChain Document objects for storage
         chunked_data_in_doc = [LangChainDocument(page_content=node.text, metadata=node.metadata) for node in chunked_data]
-        
+
         return chunked_data_in_doc
 
 

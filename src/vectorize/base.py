@@ -15,10 +15,10 @@ class DocumentVectorizer:
         self.collection_name = config.vectorize_config.collection_name
         self.embedding_model_name = config.vectorize_config.embedding_model_name
 
-    def check_collection(self):
+    def check_collection(self, collection_name):
         try:
             # Initialize Chroma Vector Store
-            self.vector_store = Chroma(persist_directory=self.vector_db_path, collection_name= self.collection_name)
+            self.vector_store = Chroma(persist_directory=self.vector_db_path, collection_name=collection_name)
             return self.vector_store
         except Exception as e:
             print(f"Failed to retrieve collection '{self.collection_name}'. Error: {e}")

@@ -33,7 +33,7 @@ def read_txt_data() -> pd.DataFrame:
 
 def read_qa_data() -> pd.DataFrame:
 
-    data_path = "./data/qa_pair/qa_pair_file.csv"
+    data_path = "./data/qa_pair/qa_pair_no_dup.csv"
 
 
     return pd.read_csv(data_path)

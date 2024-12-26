@@ -1,0 +1,21 @@
+ArticleTitle,Question,Answer,DifficultyFromQuestioner,DifficultyFromAnswerer,ArticleFile,ArticleTitle.1,retrieved_docs,llm_answer
+Abraham_Lincoln,Was Abraham Lincoln the sixteenth President of the United States?,yes,easy,easy,S08_set3_a4,,S08_set3_a4.txt,"Yes, Abraham Lincoln was the sixteenth President of the United States."
+Abraham_Lincoln,Did Lincoln sign the National Banking Act of 1863?,yes,easy,medium,S08_set3_a4,,S08_set3_a4.txt,Yes.
+Abraham_Lincoln,Did his mother die of pneumonia?,no,easy,medium,S08_set3_a4,,S08_set1_a5.txt.clean,I don't know.
+Abraham_Lincoln,How many long was Lincoln's formal education?,18 months,medium,easy,S08_set3_a4,,S08_set3_a4.txt,I don't know.
+Abraham_Lincoln,When did Lincoln begin his political career?,1832,medium,easy,S08_set3_a4,,S08_set3_a4.txt,I don't know.
+Abraham_Lincoln,What did The Legal Tender Act of 1862 establish?,"the United States Note, the first paper currency in United States history",medium,easy,S08_set3_a4,,S08_set3_a4.txt,"The Legal Tender Act of 1862 established the United States Note, the first paper currency in United States history. This was done to increase the money supply to pay for fighting the war."
+Abraham_Lincoln,Who suggested Lincoln grow a beard?,11-year-old Grace Bedell,hard,medium,S08_set3_a4,,S08_set3_a4.txt,11-year-old Grace Bedell suggested Lincoln grow a beard.
+Abraham_Lincoln,When did the Gettysburg address argue that America was born?,1776,hard,hard,S08_set3_a4,,S08_set3_a4.txt,The Gettysburg Address argued that America was born in 1776.
+Abraham_Lincoln,Did Lincoln beat John C. Breckinridge in the 1860 election?,yes,hard,medium,S08_set3_a4,,S08_set3_a4.txt,"Yes, Lincoln beat John C. Breckinridge in the 1860 election."
+Abraham_Lincoln,Was Abraham Lincoln the first President of the United States?,No,easy,easy,S08_set3_a4,,S08_set3_a4.txt,"No, Abraham Lincoln was not the first President of the United States. He was the sixteenth President."
+Abraham_Lincoln,Did Lincoln start his political career in 1832?,Yes,easy,easy,S08_set3_a4,,S08_set3_a4.txt,"Yes, Lincoln started his political career in 1832."
+Abraham_Lincoln,Did Lincoln ever represent Alton & Sangamon Railroad?,Yes,easy,easy,S08_set3_a4,,S08_set3_a4.txt,"Yes, Lincoln represented the Alton & Sangamon Railroad in a prominent 1851 case."
+Abraham_Lincoln,Which county was Lincoln born in?,Hardin County,medium,medium,S08_set3_a4,,S08_set3_a4.txt,"Abraham Lincoln was born in Hardin County, Kentucky (now part of LaRue County)."
+Abraham_Lincoln,When did Lincoln first serve as President?,"March 4, 1861",medium,hard,S08_set3_a4,,S08_set3_a4.txt,I don't know.
+Abraham_Lincoln,Who assassinated Lincoln?,John Wilkes Booth,medium,hard,S08_set3_a4,,S10_set3_a2.txt.clean,I don't know.
+Abraham_Lincoln,Did Lincoln win the election of 1860?,Yes,hard,hard,S08_set3_a4,,S08_set3_a4.txt,I don't know.
+Abraham_Lincoln,Who was the general in charge at the Battle of Antietam?,General McClellan,hard,medium,S08_set3_a4,,S08_set3_a5.txt.clean,I don't know.
+Abraham_Lincoln,Why did Lincoln issue the Emancipation Proclamation?,To free slaves ,hard,hard,S08_set3_a4,,S08_set3_a4.txt,"Lincoln issued the Emancipation Proclamation as a war measure to weaken the rebellion by destroying the economic base of its leadership class, which was led and controlled by slave owners. It also aimed to make the abolition of slavery in the rebel states an official war goal and had the support of Congress through the Second Confiscation Act."
+Abraham_Lincoln,Do scholars rank lincoln among the top three presidents?,,easy,,S08_set3_a4,,S09_set5_a6.txt.clean,I don't know.
+Abraham_Lincoln,Did lincoln have 18 months of schooling?,,easy,,S08_set3_a4,,S10_set1_a3.txt.clean,I don't know.
