@@ -8,7 +8,7 @@ def vectorize(data: LangChainDocument, config: RAGConfig, chroma_db_path):
 
     if config.vectorize_config.renew_collection and vectorizer.check_collection(config.vectorize_config.collection_name):
         try:
-            vectorizer.delete_collection()
+            vectorizer.delete_collection(config.vectorize_config.collection_name)
         except Exception as e:
                 raise RuntimeError(f"Failed to delete collection '{config.vectorize_config.collection_name}': {e}")
 

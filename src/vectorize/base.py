@@ -1,9 +1,12 @@
 import os
+from dotenv import load_dotenv
 from configs.rag_config import RAGConfig
 from langchain_chroma import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
+from chromadb import PersistentClient
 
 class DocumentVectorizer:
+    load_dotenv()
     def __init__(self, config: RAGConfig, chroma_db_path):
         if not os.path.exists(chroma_db_path):
             os.makedirs(chroma_db_path)
@@ -40,11 +43,15 @@ class DocumentVectorizer:
         )
         print(f"Collection '{self.collection_name}' has been created and stored.")
 
-    def delete_collection(self):
+    def delete_collection(self, collection_name):
+        """
+        https://github.com/langchain-ai/langchain/discussions/17797
+        """
         try:
-            # Remove the entire collection from Chroma storage
-            self.vector_store = Chroma(persist_directory=self.vector_db_path, collection_name=self.collection_name)
-            self.vector_store.delete_collection()
+            # self.vector_store = Chroma(persist_directory=self.vector_db_path, collection_name=collection_name)
+            # self.vector_store.delete_collection()
+            chroma_client = PersistentClient(path=os.getenv('CHROMA_DB_PATH'))
+            chroma_client.delete_collection(collection_name)
             print(f"Collection '{self.collection_name}' has been deleted.")
         except Exception as e:
             print(f"Failed to delete collection '{self.collection_name}'. Error: {e}")

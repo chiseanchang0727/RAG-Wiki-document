@@ -7,6 +7,7 @@ from src.data_io.read_data import read_txt_data, read_qa_data
 from src.chunk.chunk import chunk_data
 from src.vectorize.doc_vectorize import vectorize
 from src.retriever.doc_retrieval import doc_retrieval
+from chromadb import PersistentClient
 
 def get_argument():
     args = argparse.ArgumentParser()
@@ -14,7 +15,8 @@ def get_argument():
 
     args.add_argument('--chunk', required=False, action='store_true', help='chunk the data.')
     args.add_argument('--vectorize', required=False, action='store_true', help='vectorize the data')
-    args.add_argument('--retriever', required=False, action='store_true', help='vectorize the data')
+    args.add_argument('--retriever', required=False, action='store_true', help='retrieve the results.')
+    args.add_argument('--deletecollection', required=False)
 
     return args.parse_args()
 
@@ -42,6 +44,22 @@ def main():
         df_qa = read_qa_data()
 
         result = doc_retrieval(config=config , vectorstore_path=chroma_db_path, qa_data=df_qa, chunked_data=chunked_data)
+
+    if args.deletecollection:
+        collection_name = args.deletecollection
+        try:
+            chroma_client = PersistentClient(path=os.getenv('CHROMA_DB_PATH'))
+            if collection_name != 'all':
+                chroma_client.delete_collection(collection_name)
+                print(f"Collection '{collection_name}' has been deleted.")
+            else: 
+                collections = chroma_client.list_collections()
+                for collection in collections:
+                    chroma_client.delete_collection(collection.name)
+                    print(f"Deleted collection: {collection.name}")
+            
+        except Exception as e:
+            print(f"Failed to delete collection '{collection_name}'. Error: {e}")
 
 if __name__ == "__main__":
     main()
