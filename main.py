@@ -1,5 +1,6 @@
 import os
 import argparse
+import chromadb.cli
 from dotenv import load_dotenv
 from utils import load_config_from_yaml
 from configs.rag_config import RAGConfig
@@ -8,6 +9,8 @@ from src.chunk.chunk import chunk_data
 from src.vectorize.doc_vectorize import vectorize
 from src.retriever.doc_retrieval import doc_retrieval
 from chromadb import PersistentClient
+import chromadb
+from chromadb.config import Settings
 
 def get_argument():
     args = argparse.ArgumentParser()
@@ -15,8 +18,8 @@ def get_argument():
 
     args.add_argument('--chunk', required=False, action='store_true', help='chunk the data.')
     args.add_argument('--vectorize', required=False, action='store_true', help='vectorize the data')
-    args.add_argument('--retriever', required=False, action='store_true', help='retrieve the results.')
-    args.add_argument('--deletecollection', required=False)
+    args.add_argument('--retrieve', required=False, action='store_true', help='retrieve the results.')
+    args.add_argument('--deletecollection', required=False, help='delete the entered collection name.')
 
     return args.parse_args()
 
@@ -38,17 +41,20 @@ def main():
         chunked_data = chunk_data(df, config=config, page_content_column='file_content')
         vectorize(data=chunked_data, config=config, chroma_db_path=chroma_db_path)
 
-    if args.retriever:
+    if args.retrieve:
         df = read_txt_data()
         chunked_data = chunk_data(df, config=config, page_content_column='file_content')
         df_qa = read_qa_data()
 
         result = doc_retrieval(config=config , vectorstore_path=chroma_db_path, qa_data=df_qa, chunked_data=chunked_data)
+        result
+        print(1)
 
     if args.deletecollection:
+
         collection_name = args.deletecollection
         try:
-            chroma_client = PersistentClient(path=os.getenv('CHROMA_DB_PATH'))
+            chroma_client = PersistentClient(path=os.getenv('CHROMA_DB_PATH'), )
             if collection_name != 'all':
                 chroma_client.delete_collection(collection_name)
                 print(f"Collection '{collection_name}' has been deleted.")

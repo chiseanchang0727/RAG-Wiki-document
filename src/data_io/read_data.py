@@ -33,7 +33,6 @@ def read_txt_data() -> pd.DataFrame:
 
 def read_qa_data() -> pd.DataFrame:
 
-    data_path = "./data/qa_pair/qa_pair_file.csv"
-
-
-    return pd.read_csv(data_path)
+    data_path = "./data/qa_pair/cleaned_qa_pair_file.csv"
+    df = pd.read_csv(data_path)
+    return df.iloc[:50]
