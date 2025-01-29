@@ -34,7 +34,7 @@ def main():
 
     if args.chunk:
         df = read_txt_data()
-        chunked_data = chunk_data(df, config=config, page_content_column='file_content')
+        chunked_data = chunk_data(df.head(5), config=config, page_content_column='file_content')
     
     if args.vectorize:
         df = read_txt_data()

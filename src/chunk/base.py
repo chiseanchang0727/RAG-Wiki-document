@@ -4,6 +4,7 @@ from langchain.schema import Document as LangChainDocument
 from llama_index.core import Document as LlamaIndexDocument
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from llama_index.core.node_parser import SentenceSplitter
+import uuid
 
 class DocumentChunk:
     def __init__(self, df, chunk_method, chunk_size, chunk_overlap, page_content_column):
@@ -28,9 +29,7 @@ class DocumentChunk:
                 ) 
                 for _, row in df.iterrows()
             ]
-
-        
-
+     
     def recursive_splitter(self):
 
         text_splitter = RecursiveCharacterTextSplitter(
@@ -42,6 +41,9 @@ class DocumentChunk:
 
         chunked_data = text_splitter.transform_documents(self.loaded_data)
 
+        for chunk in chunked_data:
+            chunk.metadata['uuid'] = str(uuid.uuid4())
+
         return chunked_data
     
     def sentence_splitter(self):
@@ -52,7 +54,15 @@ class DocumentChunk:
         chunked_data = splitter.get_nodes_from_documents(self.loaded_data)
         
         # Convert nodes into LangChain Document objects for storage
-        chunked_data_in_doc = [LangChainDocument(page_content=node.text, metadata=node.metadata) for node in chunked_data]
+        chunked_data_in_doc = [
+            LangChainDocument(page_content=node.text, 
+                              metadata={
+                                  **node.metadata,
+                                  'uuid': str(uuid.uuid4())
+                                  }
+                              
+            ) for node in chunked_data
+        ]
         
         return chunked_data_in_doc
 
