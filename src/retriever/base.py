@@ -28,19 +28,19 @@ class CombineRetriever:
         top_k_indices = np.argsort(scores)[::-1][:self.kw_top_k]
         top_k_docs = [self.chunked_data[i] for i in top_k_indices]
 
-        return [{'file_name': item.metadata['file_name'], 'file_content': item.page_content} for item in top_k_docs]
+        return [{'file_name': item.metadata['file_name'], 'uuid': item.metadata['uuid'], 'file_content': item.page_content} for item in top_k_docs]
     
     def semantic_retrieval(self, query):
 
         vector_results = self.vectorstore.similarity_search_with_relevance_scores(query, k=25)
 
-        return [{'file_name': item[0].metadata['file_name'], 'file_content': item[0].page_content} for item in vector_results]
+        return [{'file_name': item[0].metadata['file_name'], 'uuid': item[0].metadata['uuid'], 'file_content': item[0].page_content} for item in vector_results]
     
     def rrf(self, result_list: list, k=60):
         rrf_scores = {}
         for result in result_list:
             for rank, doc in enumerate(result):
-                doc_id = doc['file_name']
+                doc_id = doc['uuid']
                 # get the score of doc_id, return 0 if the doc_id is not existed    
                 rrf_scores[doc_id] = rrf_scores.get(doc_id, 0) + 1/(k + rank)
 
